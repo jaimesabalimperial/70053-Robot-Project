@@ -1,3 +1,4 @@
+import random as random
 #define size of grid in which robot can move in
 grid_size = 10
 
@@ -26,13 +27,13 @@ def coordinates_func(row, col):
 def quadrant(coordinates, grid_len=grid_size):
 
     quadrant_str = ""
-    if coordinates[0] <= grid_size/2 and coordinates[1] >= grid_size/2: 
+    if coordinates[0] < grid_size/2 and coordinates[1] >= grid_size/2: 
         quadrant_str = "top right"
     elif coordinates[0] >= grid_size/2 and coordinates[1] >= grid_size/2: 
         quadrant_str = "bottom right"
-    elif coordinates[0] >= grid_size/2 and coordinates[1] <= grid_size/2: 
+    elif coordinates[0] >= grid_size/2 and coordinates[1] < grid_size/2: 
         quadrant_str = "bottom left"
-    elif coordinates[0] <= grid_size/2 and coordinates[1] <= grid_size/2: 
+    elif coordinates[0] < grid_size/2 and coordinates[1] <= grid_size/2: 
         quadrant_str = "top left"
     else:
         quadrant_str = "center"
@@ -67,8 +68,7 @@ def motion(coordinates, direction):
 intro()
 
 #user inputs for initial robot coordinate
-row = int(input("What is its current row coordinate? "))
-col = int(input("What is its current column coordinate? "))
+row, col = random.randint(0, grid_size), random.randint(0, grid_size)
 
 #initialise robot
 coordinates = coordinates_func(row, col)
@@ -76,7 +76,8 @@ initial_quadrant = quadrant(coordinates)
 coordinate_message(coordinates, initial_quadrant)
 
 #add direction and motion components
-direction = input("What is its initial direction [n|s|e|w]? ")
+possible_directions = ["n", "s", "e", "w"]
+direction = possible_directions[random.randint(0,3)]
 new_coordinates = motion(coordinates, direction)
 new_quadrant = quadrant(new_coordinates)
 coordinate_message(new_coordinates, new_quadrant)
