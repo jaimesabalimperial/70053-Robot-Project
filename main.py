@@ -3,6 +3,7 @@ import random as random
 grid_size = 10
 
 def intro():
+    """Itroduction to robot program."""
     name = input("What is the name of the robot? ")
     identifier = 1000
 
@@ -10,7 +11,7 @@ def intro():
     print(message)
 
 def coordinates_func(row, col):
-
+    """Considers limit cases for when row and column numbers arent within the grid (i.e >grid_size or <0)."""
     #consider limit cases
     if row < 0: 
         row = 0
@@ -25,7 +26,7 @@ def coordinates_func(row, col):
     return (row,col)
 
 def quadrant(coordinates, grid_len=grid_size):
-
+    """Returns a string with the quadrant the robot is in depending on its coordinates on the grid."""
     quadrant_str = ""
     if coordinates[0] < grid_size/2 and coordinates[1] >= grid_size/2: 
         quadrant_str = "top right"
@@ -41,9 +42,12 @@ def quadrant(coordinates, grid_len=grid_size):
     return quadrant_str
 
 def coordinate_message(coordinates, quadrant):
-     print(f"My current location is {coordinates}. I am in the {quadrant} quadrant.")
+    """Prints message containing coordinate and quadrant information."""
+    print(f"My current location is {coordinates}. I am in the {quadrant} quadrant.")
 
 def motion(coordinates, direction):
+    """Moves robot one space in the direction specified (or automatically assigned) and returns the
+    new coordinates."""
     direction_string = ""
     new_coordinates = ()
 
