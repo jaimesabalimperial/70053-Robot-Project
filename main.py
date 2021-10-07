@@ -34,7 +34,7 @@ def read_robot_name():
     print(message)
 
 
-def coordinates_(row, col, grid_size = 10):
+def coordinates_func(row, col, grid_size = 10):
     """Considers limit cases for when row and column numbers arent within the grid (i.e >grid_size or <0)."""
     #consider limit cases
     if row < 0: 
@@ -111,12 +111,11 @@ def run_simulation(grid_size=10, target_location=(9,9), direction_dict={"n": "No
 
     Args:
         grid_size (int): The size of the grid. Defaults to 10.
-        target_row (int): The target row coordinate. Defaults to 9.
-        target_col (int): The target column coordinate. Defaults to 9.
+        target_location (tuple): The target coordinate to reach. Defaults to (9,9).
     """
     read_robot_name() #reas robot name and introduce robot with identifier
 
-    #automated inputs for initial robot coordinate
+    #automated random initial robot coordinates
     row, col = random.randint(0, grid_size), random.randint(0, grid_size)
 
     #initialise robot coordinates (automated)
