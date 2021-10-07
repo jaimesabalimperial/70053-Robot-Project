@@ -41,50 +41,76 @@ def quadrant(coordinates, grid_len=grid_size):
 
     return quadrant_str
 
-def coordinate_message(coordinates, quadrant):
-    """Prints message containing coordinate and quadrant information."""
-    print(f"My current location is {coordinates}. I am in the {quadrant} quadrant.")
 
-def motion(coordinates, direction):
+def motion(coordinates, direction, n_steps = 3):
     """Moves robot one space in the direction specified (or automatically assigned) and returns the
     new coordinates."""
     direction_string = ""
-    new_coordinates = ()
+    new_coordinates = coordinates
+    direction_dict = {"n": "North", "s": "South", "e": "East", "w": "West"}
 
-    if direction == "n": 
-        direction_string = "North"
-        new_coordinates = coordinates_func(coordinates[0]-1, coordinates[1])
-    if direction == "s": 
-        direction_string = "South"
-        new_coordinates = coordinates_func(coordinates[0]+1, coordinates[1])
-    if direction == "e": 
-        direction_string = "East"
-        new_coordinates = coordinates_func(coordinates[0], coordinates[1]+1)
-    if direction == "w": 
-        direction_string = "West"
-        new_coordinates = coordinates_func(coordinates[0], coordinates[1]-1)
+    while n_steps > 0:
+        print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
+
+        if direction == "n": 
+            if new_coordinates[0] == 0:
+                print("I have a wall in front of me!")
+                break
+            else: 
+                print("Moving one step forward.")
+           
+            new_coordinates = coordinates_func(new_coordinates[0]-1, new_coordinates[1])
+
+        elif direction == "s": 
+
+            if new_coordinates[0] == 9:
+                print("I have a wall in front of me!")
+                break
+            else: 
+                print("Moving one step forward.")
+           
+            new_coordinates = coordinates_func(new_coordinates[0]+1, new_coordinates[1])
+
+        elif direction == "e": 
+
+            if new_coordinates[1] == 9:
+                print("I have a wall in front of me!")
+                break
+            else: 
+                print("Moving one step forward.")
+           
+            new_coordinates = coordinates_func(new_coordinates[0], new_coordinates[1]+1)
+
+        elif direction == "w": 
+
+            if new_coordinates[1] == 0:
+                print("I have a wall in front of me!")
+                break
+            else: 
+                print("Moving one step forward.")
+           
+
+            new_coordinates = coordinates_func(new_coordinates[0], new_coordinates[1]-1)
+
     
-    print(f"I am facing {direction_string}")
-    print("Moving one step forward.")
-        
+        n_steps -= 1
+    
+
     return new_coordinates
 
-intro()
+if __name__ == "__main__":
+    intro()
 
-#user inputs for initial robot coordinate
-row, col = random.randint(0, grid_size), random.randint(0, grid_size)
+    #user inputs for initial robot coordinate
+    row, col = random.randint(0, grid_size), random.randint(0, grid_size)
 
-#initialise robot
-coordinates = coordinates_func(row, col)
-initial_quadrant = quadrant(coordinates)
-coordinate_message(coordinates, initial_quadrant)
+    #initialise robot
+    coordinates = coordinates_func(row, col)
 
-#add direction and motion components
-possible_directions = ["n", "s", "e", "w"]
-direction = possible_directions[random.randint(0,3)]
-new_coordinates = motion(coordinates, direction)
-new_quadrant = quadrant(new_coordinates)
-coordinate_message(new_coordinates, new_quadrant)
+    #add direction and motion components
+    possible_directions = ["n", "s", "e", "w"]
+    direction = possible_directions[random.randint(0,3)]
+    new_coordinates = motion(coordinates, direction)
 
 
 
