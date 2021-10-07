@@ -42,19 +42,23 @@ def quadrant(coordinates, grid_len=grid_size):
     return quadrant_str
 
 
-def motion(coordinates, direction, n_steps = 3):
+def motion(coordinates, direction):
     """Moves robot one space in the direction specified (or automatically assigned) and returns the
     new coordinates."""
     direction_string = ""
     new_coordinates = coordinates
     direction_dict = {"n": "North", "s": "South", "e": "East", "w": "West"}
 
-    while n_steps > 0:
+    motion_in_place = True
+    while motion_in_place:
         print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
 
         if direction == "n": 
             if new_coordinates[0] == 0:
                 print("I have a wall in front of me!")
+                print("Turning 90 degreed clockwise.")
+                direction = "e"
+                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
                 break
             else: 
                 print("Moving one step forward.")
@@ -65,6 +69,9 @@ def motion(coordinates, direction, n_steps = 3):
 
             if new_coordinates[0] == 9:
                 print("I have a wall in front of me!")
+                print("Turning 90 degreed clockwise.")
+                direction = "w"
+                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
                 break
             else: 
                 print("Moving one step forward.")
@@ -75,6 +82,9 @@ def motion(coordinates, direction, n_steps = 3):
 
             if new_coordinates[1] == 9:
                 print("I have a wall in front of me!")
+                print("Turning 90 degreed clockwise.")
+                direction = "s"
+                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
                 break
             else: 
                 print("Moving one step forward.")
@@ -85,17 +95,16 @@ def motion(coordinates, direction, n_steps = 3):
 
             if new_coordinates[1] == 0:
                 print("I have a wall in front of me!")
+                print("Turning 90 degreed clockwise.")
+                direction = "n"
+                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
                 break
             else: 
                 print("Moving one step forward.")
            
 
             new_coordinates = coordinates_func(new_coordinates[0], new_coordinates[1]-1)
-
     
-        n_steps -= 1
-    
-
     return new_coordinates
 
 if __name__ == "__main__":
