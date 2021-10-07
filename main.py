@@ -1,6 +1,7 @@
 import random as random
-#define size of grid in which robot can move in
+#define size of grid in which robot can move in and direction dictionary
 grid_size = 10
+direction_dict = {"n": "North", "s": "South", "e": "East", "w": "West"}
 
 def intro():
     """Itroduction to robot program."""
@@ -41,25 +42,32 @@ def quadrant(coordinates, grid_len=grid_size):
 
     return quadrant_str
 
+def location_message(coordinates, direction):
+    print(f"I am currently at {coordinates}, facing {direction_dict[direction]}")
+
+def wall_message():
+    print("I have a wall in front of me!")
+    print("Turning 90 degreed clockwise.")
 
 def motion(coordinates, direction):
     """Moves robot one space in the direction specified (or automatically assigned) and returns the
     new coordinates."""
-    direction_string = ""
-    new_coordinates = coordinates
-    direction_dict = {"n": "North", "s": "South", "e": "East", "w": "West"}
+    drink_location = (9,9) #location of Ribena drink
+    new_coordinates = coordinates #set new coordinates equal to initia coordinates
 
+    #initialise motion
     motion_in_place = True
     while motion_in_place:
-        print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
+        location_message(new_coordinates, direction)
+        #pause motion if location is the same as drink
+        if new_coordinates == drink_location:
+            print("I am drinking Ribena! I am happy!")
+            break
 
         if direction == "n": 
             if new_coordinates[0] == 0:
-                print("I have a wall in front of me!")
-                print("Turning 90 degreed clockwise.")
                 direction = "e"
-                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
-                break
+                wall_message()
             else: 
                 print("Moving one step forward.")
            
@@ -68,11 +76,8 @@ def motion(coordinates, direction):
         elif direction == "s": 
 
             if new_coordinates[0] == 9:
-                print("I have a wall in front of me!")
-                print("Turning 90 degreed clockwise.")
                 direction = "w"
-                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
-                break
+                wall_message()
             else: 
                 print("Moving one step forward.")
            
@@ -81,11 +86,8 @@ def motion(coordinates, direction):
         elif direction == "e": 
 
             if new_coordinates[1] == 9:
-                print("I have a wall in front of me!")
-                print("Turning 90 degreed clockwise.")
                 direction = "s"
-                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
-                break
+                wall_message()
             else: 
                 print("Moving one step forward.")
            
@@ -94,11 +96,8 @@ def motion(coordinates, direction):
         elif direction == "w": 
 
             if new_coordinates[1] == 0:
-                print("I have a wall in front of me!")
-                print("Turning 90 degreed clockwise.")
                 direction = "n"
-                print(f"I am currently at {new_coordinates}, facing {direction_dict[direction]}")
-                break
+                wall_message()
             else: 
                 print("Moving one step forward.")
            
