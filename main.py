@@ -27,7 +27,8 @@ def wall_message():
 
 def read_robot_name():
     """Itroduction to robot program."""
-    name = input("What is the name of the robot? ")
+    names_list = open("robot_names.txt").read().split()
+    name = random.choice(names_list)
     identifier = 1000
 
     message = f"Hello. My name is {name}. My ID is {identifier}."
