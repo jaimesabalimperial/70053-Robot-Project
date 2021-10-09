@@ -17,8 +17,8 @@ def compute_quadrant(coordinates, grid_size=10):
     return quadrant_str
 
 
-def location_message(coordinates, direction, direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}):
-    print(f"I am currently at {coordinates}, facing {direction_dict[direction]}")
+def location_message(position, direction, direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}):
+    print(f"I am currently at {position}, facing {direction_dict[direction]}")
 
 def wall_message():
     print("I have a wall in front of me!")
@@ -30,15 +30,15 @@ def read_robot_names(n_robots):
     #read random robot names from .txt files
     names_list = open("robot_names.txt").read().split()
     robot_names = [random.choice(names_list) for i in range(n_robots)]
-    identifiers_list = [1000+i for i in range(1,n_robots+1)]
+    robot_identifiers = [1000+i for i in range(1,n_robots+1)]
 
-    messages_list = [f"Hello. My name is {name}. My ID is {identifier}." for name,identifier in zip(robot_names,identifiers_list)]
+    messages_list = [f"Hello. My name is {name}. My ID is {identifier}." for name,identifier in zip(robot_names,robot_identifiers)]
     
     #print out introductory messages for each robot
     for message in messages_list:
         print(message)
 
-    return robot_names
+    return robot_identifiers, robot_names
 
 
 def coordinates_func(row, col, grid_size = 10):
@@ -57,55 +57,56 @@ def coordinates_func(row, col, grid_size = 10):
     return [row,col]
 
 
-def navigate(robot_names, initial_coordinates_list, directions_list, target_locations=[(9,9), (0,9), (9,0), (0,0)]):
+def navigate(robots_list):
     """Moves robot one space in the direction specified (or automatically assigned) and returns the
     new coordinates."""
-    for i, robot in enumerate(robot_names):
-        print(f"\n{robot} is searching for its drink.")
-        new_coordinates = initial_coordinates_list[i] #set new coordinates equal to initia coordinates
+    for i, robot in enumerate(robots_list):
+        name = robot["name"]
+        print(f"\n{name} is searching for its drink.")
+        new_coordinates = robot["position"] #set new coordinates equal to initial coordinates
 
         #initialise motion
         motion_in_place = True
         while motion_in_place:
-            location_message(new_coordinates, directions_list[i])
+            location_message(new_coordinates, robot["direction"])
             #pause motion if location is the same as drink
-            if tuple(new_coordinates) == target_locations[i]:
+            if tuple(new_coordinates) == robot["target"]:
                 print("I am drinking Ribena! I am happy!")
                 break
 
-            if directions_list[i] == "n": 
+            if robot["direction"] == "n": 
                 if new_coordinates[0] == 0:
-                    directions_list[i] = "e"
+                    robot["direction"] = "e"
                     wall_message()
                 else: 
                     print("Moving one step forward.")
             
                 new_coordinates = coordinates_func(new_coordinates[0]-1, new_coordinates[1])
 
-            elif directions_list[i] == "s": 
+            elif robot["direction"] == "s": 
 
                 if new_coordinates[0] == 9:
-                    directions_list[i] = "w"
+                    robot["direction"] = "w"
                     wall_message()
                 else: 
                     print("Moving one step forward.")
             
                 new_coordinates = coordinates_func(new_coordinates[0]+1, new_coordinates[1])
 
-            elif directions_list[i] == "e": 
+            elif robot["direction"] == "e": 
 
                 if new_coordinates[1] == 9:
-                    directions_list[i] = "s"
+                    robot["direction"] = "s"
                     wall_message()
                 else: 
                     print("Moving one step forward.")
             
                 new_coordinates = coordinates_func(new_coordinates[0], new_coordinates[1]+1)
 
-            elif directions_list[i] == "w": 
+            elif robot["direction"] == "w": 
 
                 if new_coordinates[1] == 0:
-                    directions_list[i] = "n"
+                    robot["direction"] = "n"
                     wall_message()
                 else: 
                     print("Moving one step forward.")
@@ -114,26 +115,37 @@ def navigate(robot_names, initial_coordinates_list, directions_list, target_loca
                 new_coordinates = coordinates_func(new_coordinates[0], new_coordinates[1]-1)
         
 
-def run_simulation(n_robots, grid_size=10, target_location=(9,9), direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}):
+def run_simulation(n_robots, 
+                   grid_size=10, 
+                   direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}, 
+                   target_locations=[(9,9), (0,9), (9,0), (0,0)]):
+
     """ Start robot navigation simulation.
 
     Args:
         grid_size (int): The size of the grid. Defaults to 10.
         target_location (tuple): The target coordinate to reach. Defaults to (9,9).
     """
-    assert n_robots <=4, "Maximum number of robots is 4."
+    assert n_robots <=4, "Maximum number of robots is 4 (since there are only four target locations)."
 
-    robot_names = read_robot_names(n_robots) #reas robot name and introduce robot with identifier
+    #read robot name and introduce robot with identifier
+    robot_identifiers, robot_names = read_robot_names(n_robots) 
 
-    #automated random initial robot coordinates
-    initial_coordinates = [coordinates_func(random.randint(0, grid_size), random.randint(0, grid_size))]*n_robots
+    robots_list = []
+    #record traits in dictionary
+    for i,robot in enumerate(robot_names): 
+        robot_dict = {} # initialise dictionary for each robot
 
-    #add random direction and consequent motion
-    possible_directions = list(direction_dict.keys())
-    directions_list = [possible_directions[random.randint(0,3)]]*n_robots
+        robot_dict["id"] = robot_identifiers[i] #id
+        robot_dict["name"] = robot_names[i] #name
+        robot_dict["position"] = coordinates_func(random.randint(0, grid_size), random.randint(0, grid_size)) #automated random initial robot coordinates
+        robot_dict["direction"] = list(direction_dict)[random.randint(0,3)] #direction
+        robot_dict["target"] = target_locations[i]
+   
+        robots_list.append(robot_dict)
 
     #navigate robot to drink
-    navigate(robot_names, initial_coordinates, directions_list)
+    navigate(robots_list)
 
 
 if __name__ == "__main__":
