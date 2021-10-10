@@ -1,30 +1,6 @@
 import random as random
 import itertools 
 
-def coordinates_func(row, col, grid_size=10):
-    """Considers limit cases for when row and column numbers arent within the grid (i.e >grid_size or <0)."""
-    # consider limit cases
-    if row < 0:
-        row = 0
-    elif row >= grid_size:
-        row = grid_size - 1
-
-    if col < 0:
-        col = 0
-    elif col >= grid_size:
-        col = grid_size - 1
-
-    return [row, col]
-
-
-def location_message(position, direction, direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}):
-    print(f"I am currently at {position}, facing {direction_dict[direction]}")
-
-
-def wall_message():
-    print("I have a wall in front of me!")
-    print("Turning 90 degreed clockwise.")
-
 class Robot():
     #generate new id for each Robot instance
     newid = itertools.count()
@@ -36,64 +12,70 @@ class Robot():
         self.direction = direction
         self.target = target
 
+    def greet(self):
+        """Introduce robot to user. """
         print(f"Hello. My name is {self.name}. My ID is {self.id}.")
+    
+
+    def say_location(self):
+        """Say position and direction."""
+
+        direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}
+        print(f"I am currently at {self.position}, facing {direction_dict[self.direction]}")
+
+    def turn_clockwise(self):
+        """Turns 90 degrees clockwise."""
+
+        turning_dict = {"n":"e", "e":"s", "s":"w", "w":"n"}
+        self.direction = turning_dict[self.direction]
+
+    def is_stuck(self):
+        """Returns True if robot is at the corresponding edge to its direction and prints a message to alert the user."""
+        if (self.position[0] == 0 and self.direction == "n"
+            or self.position[0] == 9 and self.direction == "s"
+            or self.position[1] == 9 and self.direction == "e"
+            or self.position[1] == 0 and self.direction == "w"):
+
+            print("I have a wall in front of me!")
+            print("Turning 90 degreed clockwise.")
+            return True   
+        else: 
+            return False
+    
+    def move(self):
+        """Move one space in current direction."""
+        if self.direction == "n":
+            self.position = (self.position[0]-1, self.position[1])
+
+        elif self.direction == "s":
+            self.position = (self.position[0]+1, self.position[1])
+
+        elif self.direction == "e":
+            self.position = (self.position[0], self.position[1]+1)
+
+        elif self.direction == "w":
+            self.position = (self.position[0], self.position[1]-1)
 
     def navigate(self):
         """Navigates robot across grid until it reaches its target location."""
 
         print(f"\n{self.name} is searching for its drink.")
 
-        # set new coordinates equal to initial coordinates
-        new_coordinates = self.position
-
         # initialise motion
         motion_in_place = True
+
         while motion_in_place:
-            location_message(new_coordinates, self.direction)
-            # pause motion if location is the same as drink
-            if tuple(new_coordinates) == self.target:
+            self.say_location()
+
+            # pause motion if position is the same as drink
+            if self.position == self.target:
                 print("I am drinking Ribena! I am happy!")
-                break
-
-            if self.direction == "n":
-                if new_coordinates[0] == 0:
-                    self.direction = "e"
-                    wall_message()
+                motion_in_place = False
+            
+            #if robot is not at target, move in current direction until stuck, then turn and so on...
+            else:
+                if self.is_stuck():
+                    self.turn_clockwise()
                 else:
                     print("Moving one step forward.")
-
-                new_coordinates = coordinates_func(new_coordinates[0]-1,
-                                                   new_coordinates[1])
-
-            elif self.direction == "s":
-
-                if new_coordinates[0] == 9:
-                    self.direction = "w"
-                    wall_message()
-                else:
-                    print("Moving one step forward.")
-
-                new_coordinates = coordinates_func(new_coordinates[0]+1, 
-                                                   new_coordinates[1])
-
-            elif self.direction == "e":
-
-                if new_coordinates[1] == 9:
-                    self.direction = "s"
-                    wall_message()
-                else:
-                    print("Moving one step forward.")
-
-                new_coordinates = coordinates_func(new_coordinates[0], 
-                                                   new_coordinates[1]+1)
-
-            elif self.direction == "w":
-
-                if new_coordinates[1] == 0:
-                    self.direction = "n"
-                    wall_message()
-                else:
-                    print("Moving one step forward.")
-
-                new_coordinates = coordinates_func(new_coordinates[0], 
-                                                   new_coordinates[1]-1)
+                    self.move()

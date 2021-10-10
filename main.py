@@ -1,5 +1,20 @@
 import random as random
-from robot import Robot, coordinates_func
+from robot import Robot
+
+def make_coordinates_real(row, col, grid_size=10):
+    """Considers limit cases for when row and column numbers arent within the grid (i.e >grid_size or <0)."""
+    # consider limit cases
+    if row < 0:
+        row = 0
+    elif row >= grid_size:
+        row = grid_size - 1
+
+    if col < 0:
+        col = 0
+    elif col >= grid_size:
+        col = grid_size - 1
+
+    return [row, col]
 
 def run_simulation(n_robots,
                    grid_size=10,
@@ -25,11 +40,13 @@ def run_simulation(n_robots,
 
         #define robot traits, create robot object
         name = robot_names[i]
-        position = coordinates_func(random.randint(0, grid_size), random.randint(0, grid_size)) 
+        position = make_coordinates_real(random.randint(0, grid_size), random.randint(0, grid_size)) 
         direction = list(direction_dict)[random.randint(0, 3)] 
         target = target_locations[i]
 
         robot = Robot(name, position, direction, target)
+        robot.greet() #introduce robot
+
         robots_list.append(robot)
 
     # navigate robots in another loop so they all introduce themselves before navigating
