@@ -4,8 +4,7 @@ from robot import Robot, coordinates_func
 def run_simulation(n_robots,
                    grid_size=10,
                    direction_dict={"n": "North", "s": "South",
-                                   "e": "East", "w": "West"},
-                   target_locations=[(9, 9), (0, 9), (9, 0), (0, 0)]):
+                                   "e": "East", "w": "West"}):
     """ Start robot navigation simulation.
 
     Args:
@@ -17,6 +16,8 @@ def run_simulation(n_robots,
     #read robot name and introduce robot with identifier
     names_list = open("robot_names.txt").read().split()
     robot_names = [random.choice(names_list) for i in range(n_robots)]
+
+    target_locations=[(grid_size-1, grid_size-1), (0, grid_size-1), (grid_size-1, 0), (0, 0)]
 
     robots_list = []
     # record traits in dictionary
