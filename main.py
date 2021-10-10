@@ -16,23 +16,39 @@ def make_coordinates_real(row, col, grid_size=10):
 
     return [row, col]
 
+
+def generate_random_name(file): 
+    """Generates a random name from a file that has names."""
+    #read names from list
+    names_list = open(file).read().split()
+    name = random.choice(names_list)
+
+    return name
+
+
+def generate_random_direction():
+    """Generates a random direction."""
+    possible_directions = ["n", "s", "e", "w"]
+    random_direction = random.choice(possible_directions)
+
+    return random_direction
+
+
 def run_simulation(n_robots,
-                   grid_size=10,
-                   direction_dict={"n": "North", "s": "South",
-                                   "e": "East", "w": "West"}):
+                   grid_size=10):
     """ Start robot navigation simulation.
 
     Args:
+        n_robots (int): Number of robots in grid.
         grid_size (int): The size of the grid. Defaults to 10.
-        target_location (tuple): The target coordinate to reach. Defaults to (9,9).
     """
     assert n_robots <= 4, "Maximum number of robots is 4 (since there are only four target locations)."
 
-    #read robot name and introduce robot with identifier
-    names_list = open("robot_names.txt").read().split()
-    robot_names = [random.choice(names_list) for i in range(n_robots)]
+    #generate random name
+    robot_names = [generate_random_name("robot_names.txt") for i in range(n_robots)]
 
-    target_locations=[(grid_size-1, grid_size-1), (0, grid_size-1), (grid_size-1, 0), (0, 0)]
+    #define target locations
+    target_locations=[(grid_size-1, grid_size-1), (0, grid_size-1), (grid_size-1, 0), (0, 0)] 
 
     robots_list = []
     # record traits in dictionary
@@ -41,7 +57,7 @@ def run_simulation(n_robots,
         #define robot traits, create robot object
         name = robot_names[i]
         position = make_coordinates_real(random.randint(0, grid_size), random.randint(0, grid_size)) 
-        direction = list(direction_dict)[random.randint(0, 3)] 
+        direction = generate_random_direction()
         target = target_locations[i]
 
         robot = Robot(name, position, direction, target)

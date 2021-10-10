@@ -20,7 +20,7 @@ class Robot():
     def say_location(self):
         """Say position and direction."""
 
-        direction_dict={"n": "North", "s": "South", "e": "East", "w": "West"}
+        direction_dict = {"n": "North", "s": "South", "e": "East", "w": "West"} #dictionary including complete strings for the direction abbreviations
         print(f"I am currently at {self.position}, facing {direction_dict[self.direction]}")
 
     def turn_clockwise(self):
@@ -38,6 +38,7 @@ class Robot():
 
             print("I have a wall in front of me!")
             print("Turning 90 degreed clockwise.")
+            
             return True   
         else: 
             return False
