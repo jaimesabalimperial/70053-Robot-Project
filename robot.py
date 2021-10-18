@@ -37,7 +37,7 @@ class Robot():
             or self.position[1] == 0 and self.direction == "w"):
 
             print("I have a wall in front of me!")
-            print("Turning 90 degreed clockwise.")
+            print("Turning 90 degrees clockwise.")
             
             return True   
         else: 
