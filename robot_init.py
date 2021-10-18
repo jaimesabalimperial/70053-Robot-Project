@@ -5,10 +5,10 @@ class RobotInitialiser():
     with open("robot_names.txt") as names_file:
         robot_names = names_file.read().split()
     
-    def __init__(self, names = robot_names, grid_size = 10):
+    def __init__(self, grid, names = robot_names):
         self.names = names 
-        self.grid_size = grid_size
-        self.targets = [(self.grid_size-1, self.grid_size-1), (0, self.grid_size-1), (self.grid_size-1, 0), (0, 0)]
+        self.grid = grid
+        self.targets = [(self.grid.size-1, self.grid.size-1), (0, self.grid.size-1), (self.grid.size-1, 0), (0, 0)]
         self.robots = []
         
 
@@ -34,10 +34,10 @@ class RobotInitialiser():
         for i in range(n_robots):
             #define robot traits, create robot object 
             name = self.generate_name()
-            position = (random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)) 
+            position = (random.randint(0, self.grid.size-1), random.randint(0, self.grid.size-1)) 
             direction = self.generate_direction()
 
-            robot = Robot(name, position, direction, self.targets[i])
+            robot = Robot(name, position, direction, self.grid)
             robot.greet() #introduce robot
             self.robots.append(robot) #append new robot to list
 

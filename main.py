@@ -1,26 +1,28 @@
-import random as random
-from robot import Robot
+import random
 from robot_init import RobotInitialiser
+from robot import Grid, DrinkFactory
 
-def run_simulation(n_robots,
-                   grid_size=10):
+def run_simulation(n_robots, grid_size):
     """ Start robot navigation simulation.
 
     Args:
         n_robots (int): Number of robots in grid.
         grid_size (int): The size of the grid. Defaults to 10.
     """
-    assert n_robots <= 4, "Maximum number of robots is 4 (since there are only four target locations)."
+    #create grid, robots and drinks
+    grid = Grid(grid_size)
 
-    #create robots
-    initialiser = RobotInitialiser()
+    initialiser = RobotInitialiser(grid)
     initialiser.create_robots(n_robots)
 
-    #navigate robots in another loop so they all introduce themselves before navigating
-    for i in range(n_robots):
-        initialiser.robots[i].navigate()
+    drinks_factory = DrinkFactory()
+    drinks_factory.create_drinks(initialiser.robots)
 
+    #navigate robots to their respective drinks
+    for i in range(n_robots):   
+        grid.add_drink(drinks_factory.drinks[i], initialiser.targets[random.randint(0,3)])
+        initialiser.robots[i].navigate_to_drink(drinks_factory.drinks[i])
 
 if __name__ == "__main__":
     # run simulation
-    run_simulation(n_robots=4)
+    run_simulation(n_robots=6, grid_size=10)
