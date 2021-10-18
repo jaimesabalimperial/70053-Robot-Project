@@ -1,48 +1,46 @@
 import random as random
 from robot import Robot
 
-def make_coordinates_real(row, col, grid_size=10):
-    """Considers limit cases for when row and column numbers arent within the grid (i.e >grid_size or <0)."""
-    # consider limit cases
-    if row < 0:
-        row = 0
-    elif row >= grid_size:
-        row = grid_size - 1
-
-    if col < 0:
-        col = 0
-    elif col >= grid_size:
-        col = grid_size - 1
-
-    return [row, col]
-
-
-def generate_random_name(file): 
-    """Generates a random name from a file that has names."""
-    #read names from list
-    with open(file) as names_file:
-        names_list = names_file.read().split()
-    name = random.choice(names_list)
-
-    return name
-
-def generate_random_direction():
-    """Generates a random direction."""
-    possible_directions = ["n", "s", "e", "w"]
-    random_direction = random.choice(possible_directions)
-
-    return random_direction
-
-
-def initialise_robot(grid_size, target):
-    """Initialises a robot."""
-    #define robot traits, create robot object
-    name = generate_random_name("robot_names.txt")
-    position = make_coordinates_real(random.randint(0, grid_size), random.randint(0, grid_size)) 
-    direction = generate_random_direction()
-
-    robot = Robot(name, position, direction, target)
-    robot.greet() #introduce robot
+class RobotInitialiser():
+    with open("robot_names.txt") as names_file:
+        robot_names = names_file.read().split()
     
-    return robot
+    def __init__(self, names = robot_names, grid_size = 10):
+        self.names = names 
+        self.grid_size = grid_size
+        self.targets = [(self.grid_size-1, self.grid_size-1), (0, self.grid_size-1), (self.grid_size-1, 0), (0, 0)]
+        self.robots = []
+        
+
+    def generate_name(self): 
+        """Generates a random name from a file that has names."""
+        #read names from list
+
+        name = random.choice(self.names)
+
+        return name
+
+    def generate_direction(self):
+        """Generates a random direction."""
+        possible_directions = ["n", "s", "e", "w"]
+        random_direction = random.choice(possible_directions)
+
+        return random_direction
+
+
+    def create_robots(self, n_robots):
+        """Initialises a sequence of robots."""
+
+        for i in range(n_robots):
+            #define robot traits, create robot object 
+            name = self.generate_name()
+            position = (random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)) 
+            direction = self.generate_direction()
+
+            robot = Robot(name, position, direction, self.targets[i])
+            robot.greet() #introduce robot
+            self.robots.append(robot) #append new robot to list
+
+
+        
 

@@ -80,3 +80,4 @@ class Robot():
                 else:
                     print("Moving one step forward.")
                     self.move()
+

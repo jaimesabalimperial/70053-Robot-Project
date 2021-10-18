@@ -1,6 +1,6 @@
 import random as random
 from robot import Robot
-from robot_init import initialise_robot
+from robot_init import RobotInitialiser
 
 def run_simulation(n_robots,
                    grid_size=10):
@@ -12,18 +12,13 @@ def run_simulation(n_robots,
     """
     assert n_robots <= 4, "Maximum number of robots is 4 (since there are only four target locations)."
 
-    #define possible target locations
-    target_locations=[(grid_size-1, grid_size-1), (0, grid_size-1), (grid_size-1, 0), (0, 0)] 
-
-    robots_list = []
-    # record traits in dictionary
-    for i in range(n_robots):
-        robot = initialise_robot(grid_size, target_locations[i])
-        robots_list.append(robot)
+    #create robots
+    initialiser = RobotInitialiser()
+    initialiser.create_robots(n_robots)
 
     #navigate robots in another loop so they all introduce themselves before navigating
     for i in range(n_robots):
-        robots_list[i].navigate()
+        initialiser.robots[i].navigate()
 
 
 if __name__ == "__main__":
