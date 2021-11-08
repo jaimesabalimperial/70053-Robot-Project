@@ -1,5 +1,5 @@
 import random as random
-from robot import Robot
+from robot import LeapingRobot
 
 class RobotInitialiser():
     with open("robot_names.txt") as names_file:
@@ -37,7 +37,7 @@ class RobotInitialiser():
             position = (random.randint(0, self.grid.size-1), random.randint(0, self.grid.size-1)) 
             direction = self.generate_direction()
 
-            robot = Robot(name, position, direction, self.grid)
+            robot = LeapingRobot(name, position, direction, self.grid)
             robot.greet() #introduce robot
             self.robots.append(robot) #append new robot to list
 

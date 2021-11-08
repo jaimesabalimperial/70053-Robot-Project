@@ -118,4 +118,10 @@ class Robot():
                     print("Moving one step forward.")
                     self.move()
 
+class LeapingRobot(Robot):
+    def __init__(self, name, position, direction, grid):
+        super().__init__(name, position, direction, grid)
+
+    def leap_forward(self):
+        pass
 
